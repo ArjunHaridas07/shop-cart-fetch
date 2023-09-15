@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</head>
+<body>
+    <nav class="navbar navbar-light bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">
+            <img src="./images/bag-dash-fill.svg" alt="" width="30" height="24" class="d-inline-block align-text-top">
+            Shopping Cart
+          </a>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <h4 class="mt-5 ms-3">New Arrivals =></h4>
+    </div>
+    <div id="result" class="container-fluid row row-cols-1 row-cols-md-3 g-4">
+    </div>
+    <script>
+        fetch('https://dummyjson.com/carts')
+        .then(data => data.json())
+        .then(response => {
+            console.log( response.carts); // Log the array here
+
+            if (Array.isArray(response.carts)) {
+                displayContent(response.carts);
+            } else {
+                console.error("API response is not an array:", response.carts);
+            }
+        })
+        .catch(error => {
+            console.error("Error fetching data:", error);
+        });
+
+        function displayContent(carts) {
+            const resultContainer = document.getElementById('result');
+
+            for (let cart of carts) {
+                // Check if cart.products is defined
+                if (Array.isArray(cart.products) && cart.products.length > 0) {
+                    for (let product of cart.products) {
+                        const htmlData = `
+                            <div class="col">
+                                <div class="card">
+                                    <img src="https://img.eobuwie.cloud/eob_product_656w_656h(f/3/a/c/f3acd0665392f48b7fd1d72fc54d04bc6cc1084b_10_0000209034301_DM.jpg,jpg)/boty-reebok-club-c-revenge-gz8638-white-black-white.jpg" class="card-img-top"  alt="Id: ${product.id}"height="300px" width="300px">
+                                    <div class="card-body">
+                                        <h5 class="card-title">${product.title}</h5>
+                                        <p class="card-text">Price: &#8377;${product.price}</p>
+                                        <p class="card-text">Quantity: ${product.quantity}</p>
+                                        <p class="card-text">Discount Percentage : ${product.discountPercentage}%</p>
+                                        <p class="card-text">Discount Price :&#8377; ${product.discountedPrice}</p>
+                                        <p class="card-text">Total: &#8377;${product.total}</p>
+                                        <button class="btn btn-primary">Buy Now</button>
+
+
+
+
+                                        
+
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+
+                        resultContainer.innerHTML += htmlData;
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+
